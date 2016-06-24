@@ -1,24 +1,42 @@
-# -*- coding: euc-kr -*-
+# -*- coding: utf-8 -*-
 
-import urllib2, sys, re, time, traceback
-from bs4 import BeautifulSoup
+import sys, re, time, traceback
+import pprint
+import parsers
+
+def getParser(url):
+	# get proper parser 
+	if url.find("onenable.net")>-1:
+		return parsers.onenable 
+
+	print "No proper parsers for", url
+	return None
+
+def getNewArticles(url):
+	parser = getParser(url)
+	if parser:
+		articles = parser(url)
+		# need to filter new articles
+
+		return articles
+
+	return []
+
+def crawl(lists):
+	for i in lists:
+		articles = getNewArticles(lists[i])
+
+		for article in articles:
+			pprint.pprint(article)
+			# send messages to subscribing users
 
 if __name__ == "__main__":
-	
-	url = "http://onenable.net/bbs/board.php?bo_table=toonia14"
 
-	req = urllib2.Request( url )
-	response = urllib2.urlopen(req)
-	contents = response.read()
+	lists = {
+		"킹덤":"http://onenable.net/bbs/board.php?bo_table=toonia14"
+	}
+	#pprint.pprint(lists)
 
-	soup = BeautifulSoup(contents, 'html.parser')
+	crawl( lists )
 
-	#articles = soup.find_all("td", class_="list-subject")
-	#for article in articles:
-	#	print article.a
 
-	articles = soup.select("td.list-subject a")
-	for article in articles:
-		print article.attrs["href"]
-		print article.text
-		break
