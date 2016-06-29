@@ -36,7 +36,11 @@ def handle(msg):
         sendMessage(chat_id, '난 텍스트 이외의 메시지는 처리하지 못해요.')
         return
     #pprint(msg["from"])
-    name = msg["from"]["last_name"] + msg["from"]["first_name"]
+    try:
+        name = msg["from"]["last_name"] + msg["from"]["first_name"]
+    except:
+        name = ""
+
     text = msg['text'].lower()
 
     args = text.split(' ')
