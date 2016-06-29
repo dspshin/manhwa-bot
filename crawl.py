@@ -1,13 +1,38 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import sys, re, time, traceback
-import pprint
+from pprint import pprint
 import parsers
+import manhwa_list
+import sqlite3
+import telepot
+from datetime import date, datetime, timedelta
+
+ROOT = '/root/git/manhwa-bot/'
+
+conn2 = sqlite3.connect(ROOT+'logs.db')
+c2 = conn2.cursor()
+c2.execute('CREATE TABLE IF NOT EXISTS logs( url TEXT, PRIMARY KEY(url) )')
+conn2.commit()
+
+conn = sqlite3.connect(ROOT+'subscribe.db')
+c = conn.cursor()
+c.execute('CREATE TABLE IF NOT EXISTS subscribe( user TEXT, title TEXT, name TEXT, PRIMARY KEY(user,title) )')
+conn.commit()
+
+def sendMessage(user,msg):
+	try:
+		bot.sendMessage(user,msg)
+	except:
+		traceback.print_exc(file=sys.stdout)
 
 def getParser(url):
-	# get proper parser 
+	# get proper parser
 	if url.find("onenable.net")>-1:
-		return parsers.onenable 
+		return parsers.onenable
+	elif url.find("comic.naver.com")>-1:
+		return parsers.naver
 
 	print "No proper parsers for", url
 	return None
@@ -17,26 +42,52 @@ def getNewArticles(url):
 	if parser:
 		articles = parser(url)
 		# need to filter new articles
-
-		return articles
-
+		filtered = []
+		for article in articles:
+			try:
+				c2.execute('INSERT INTO logs (url) VALUES ("%s")'%(article["url"]))
+			except sqlite3.IntegrityError:
+				# means already sent
+				pass
+			else:
+				# means new
+				filtered.append( article )
+		conn2.commit()
+		return filtered
 	return []
 
 def crawl(lists):
-	for i in lists:
-		articles = getNewArticles(lists[i])
+	for title in lists:
+		#print title, lists[title]
+		articles = getNewArticles(lists[title])
+
+		users = []
+		c.execute('SELECT user FROM subscribe WHERE title="'+title+'"') # get subscribing users
+		for data in c.fetchall():
+			users.append( data[0] )
 
 		for article in articles:
-			pprint.pprint(article)
+			#pprint(article)
 			# send messages to subscribing users
+			for user in users:
+				msg = article["title"] +" "+ article["url"]
+				sendMessage( user, msg )
 
-if __name__ == "__main__":
+		#delay
+		time.sleep(2)
 
-	lists = {
-		"킹덤":"http://onenable.net/bbs/board.php?bo_table=toonia14"
-	}
-	#pprint.pprint(lists)
+today = date.today()
+current_month = today.strftime('%Y%m')
+now=datetime.now()
+past=datetime(now.year, now.month, 1) - timedelta(days=1)
+prev_month="%d%02d"%(past.year,past.month)
 
-	crawl( lists )
+TOKEN = sys.argv[1]
+print '[',today,']received token :', TOKEN
+
+bot = telepot.Bot(TOKEN)
+pprint( bot.getMe() )
+
+crawl( manhwa_list.lists )
 
 

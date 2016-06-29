@@ -22,4 +22,19 @@ def onenable(url):
 			"title": article.text.strip().split("\t")[0]
 		})
 	return res
-		
+
+def naver(url):
+	req = urllib2.Request( url )
+	response = urllib2.urlopen(req)
+	contents = response.read()
+
+	soup = BeautifulSoup(contents, 'html.parser')
+
+	res=[]
+	articles = soup.select("td.title a")
+	for a in articles:
+		res.append({
+			"url": "http://comic.naver.com"+a.attrs["href"],
+			"title": a.text.strip()
+		})
+	return res
