@@ -67,10 +67,10 @@ def crawl(lists):
 			users.append( data[0] )
 
 		for article in articles:
-			#pprint(article)
+			pprint(article)
 			# send messages to subscribing users
 			msg = article["title"] +" "+ article["url"]
-			print msg
+			#print msg
 
 			for user in users:
 				sendMessage( user, msg )
