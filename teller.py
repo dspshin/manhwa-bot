@@ -108,7 +108,9 @@ def handle(msg):
                 conn = sqlite3.connect(ROOT+'subscribe.db')
                 c = conn.cursor()
                 c.execute('SELECT count(*) from subscribe')
-                sendMessage( chat_id, c.fetch()[0] )
+                sendMessage( chat_id, str(c.fetch()) )
+            else:
+                sendMessage( chat_id, "권한이 없습니다."+chat_id )
         else:
             help(chat_id)
     else:
