@@ -75,6 +75,7 @@ def crawl(lists):
 			for user in users:
 				sendMessage( user, msg )
 
+		print 'sent to', len(users)
 		#delay
 		time.sleep(2)
 
