@@ -104,7 +104,7 @@ def handle(msg):
             else:
                 sendMessage(chat_id, "제목을 입력하세요.")
         elif text.startswith('/stat'):
-            if chat_id=="68399557": #means me
+            if chat_id==68399557: #means me
                 conn = sqlite3.connect(ROOT+'subscribe.db')
                 c = conn.cursor()
                 c.execute('SELECT count(*) from subscribe')
