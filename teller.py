@@ -108,7 +108,7 @@ def handle(msg):
                 conn = sqlite3.connect(ROOT+'subscribe.db')
                 c = conn.cursor()
                 c.execute('SELECT count(*) from subscribe')
-                sendMessage( chat_id, c.fetch() )
+                sendMessage( chat_id, c.fetch()[0] )
         else:
             help(chat_id)
     else:
