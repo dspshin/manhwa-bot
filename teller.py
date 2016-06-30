@@ -110,7 +110,7 @@ def handle(msg):
                 c.execute('SELECT count(*) from subscribe')
                 sendMessage( chat_id, str(c.fetch()) )
             else:
-                sendMessage( chat_id, "권한이 없습니다."+chat_id )
+                sendMessage( chat_id, "권한이 없습니다 - "+str(chat_id) )
         else:
             help(chat_id)
     else:
