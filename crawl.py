@@ -75,7 +75,8 @@ def crawl(lists):
 			for user in users:
 				sendMessage( user, msg )
 
-		print 'sent to', len(users)
+		if len(articles)>0:
+			print 'sent to', len(users)
 		#delay
 		time.sleep(2)
 
@@ -83,7 +84,7 @@ today = date.today()
 now=datetime.now()
 
 TOKEN = sys.argv[1]
-print '[',now,']received token :', TOKEN
+print '[',now,']' #'received token :', TOKEN
 
 bot = telepot.Bot(TOKEN)
 pprint( bot.getMe() )
