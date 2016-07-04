@@ -11,7 +11,7 @@ lists = {
     "베르세르크":"http://onenable.net/bbs/board.php?bo_table=toonia56",
     "블리치":"http://onenable.net/bbs/board.php?bo_table=toonia26",
     "베가본드":"http://onenable.net/bbs/board.php?bo_table=toonia32",
-    "아인":"http://onenable.net/bbs/board.php?bo_table=toonia963"
+    "아인":"http://onenable.net/bbs/board.php?bo_table=toonia963",
     #네이버 만화
     "고수":"http://comic.naver.com/webtoon/list.nhn?titleId=662774",
     "신의언어":"http://comic.naver.com/webtoon/list.nhn?titleId=602287",
