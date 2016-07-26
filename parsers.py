@@ -33,8 +33,13 @@ def naver(url):
 	res=[]
 	articles = soup.select("td.title a")
 	for a in articles:
+		a_url = "http://comic.naver.com"+a.attrs["href"]
+		# &weekday= 부분 제거
+		weekday = a_url.find('&weekday')
+		if weekday>-1:
+			a_url = a_url[:weekday]
 		res.append({
-			"url": "http://comic.naver.com"+a.attrs["href"],
+			"url": a_url,
 			"title": a.text.strip()
 		})
 	return res
