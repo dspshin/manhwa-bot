@@ -123,7 +123,7 @@ print 'received token :', TOKEN
 bot = telepot.Bot(TOKEN)
 pprint( bot.getMe() )
 
-bot.notifyOnMessage(handle)
+bot.message_loop(handle)
 
 print 'Listening...'
 
